@@ -1,6 +1,9 @@
 package logic
 
-import "sync"
+import (
+	"log"
+	"sync"
+)
 
 type broadcaster struct {
 	userLock sync.Mutex
@@ -39,11 +42,28 @@ func (b *broadcaster) Start() {
 			b.userLock.Unlock()
 		case message := <-b.messageChannel:
 			b.userLock.Lock()
-			for _, user := range b.users {
-				if user.UID == message.User.UID {
-					continue
+			switch {
+			case message.Ats != nil:
+				for _, at := range message.Ats {
+					if at == message.User.NickName {
+						// 不能at自己
+						continue
+					}
+
+					user, ok := b.users[at]
+					if !ok {
+						log.Printf("user %s not exist", at)
+						continue
+					}
+					user.MessageChan <- message
 				}
-				user.MessageChan <- message
+			default:
+				for _, user := range b.users {
+					if user.UID == message.User.UID {
+						continue
+					}
+					user.MessageChan <- message
+				}
 			}
 			b.userLock.Unlock()
 		}

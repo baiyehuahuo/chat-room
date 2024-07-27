@@ -6,6 +6,7 @@ import (
 	"log"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
+	"regexp"
 	"sync/atomic"
 	"time"
 )
@@ -57,6 +58,11 @@ func (u *User) ReceiveMessage(ctx context.Context) error {
 			return err
 		}
 		msg := NewMessage(u, receiveMsg["content"])
+		reg := regexp.MustCompile(`@[^\s@]{2,20}`)
+		msg.Ats = reg.FindAllString(msg.Content, -1)
+		for i := range msg.Ats {
+			msg.Ats[i] = msg.Ats[i][1:]
+		}
 		Broadcaster.Broadcast(msg)
 	}
 }
