@@ -30,6 +30,7 @@ func exists(filename string) bool {
 }
 
 func RegisterHandle() {
-	http.HandleFunc("/", nil)
-	http.HandleFunc("/ws", nil)
+	inferRootDir()
+	http.HandleFunc("/", homeHandleFunc)
+	http.HandleFunc("/ws", WebSocketHandleFunc)
 }
