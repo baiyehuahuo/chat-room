@@ -6,21 +6,29 @@ import (
 	"log"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
+	"sync/atomic"
 	"time"
 )
 
+var globalUID uint32 = 0
+var system = &User{}
+
 type User struct {
 	conn        *websocket.Conn
-	UID         int           `json:"uid"`
+	UID         uint32        `json:"uid"`
 	NickName    string        `json:"nickname"`
 	EnterAt     time.Time     `json:"enter_at"`
 	Addr        string        `json:"addr"`
 	MessageChan chan *Message `json:"-"`
 }
 
-func NewUser(conn *websocket.Conn) *User {
+func NewUser(conn *websocket.Conn, addr, nickname string) *User {
 	return &User{
 		conn:        conn,
+		UID:         atomic.AddUint32(&globalUID, 1),
+		NickName:    nickname,
+		EnterAt:     time.Now(),
+		Addr:        addr,
 		MessageChan: make(chan *Message),
 	}
 }
@@ -48,6 +56,7 @@ func (u *User) ReceiveMessage(ctx context.Context) error {
 			}
 			return err
 		}
-		_ = NewMessage(u, receiveMsg["content"])
+		msg := NewMessage(u, receiveMsg["content"])
+		Broadcaster.Broadcast(msg)
 	}
 }

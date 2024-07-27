@@ -1,6 +1,7 @@
 package server
 
 import (
+	"chatroom/logic"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -31,6 +32,9 @@ func exists(filename string) bool {
 
 func RegisterHandle() {
 	inferRootDir()
+
+	go logic.Broadcaster.Start()
+
 	http.HandleFunc("/", homeHandleFunc)
 	http.HandleFunc("/ws", WebSocketHandleFunc)
 }
