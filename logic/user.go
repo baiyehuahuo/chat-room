@@ -31,7 +31,6 @@ type User struct {
 	MessageChan chan *Message `json:"-"`
 
 	Token string `json:"token"`
-	IsNew bool   `json:"is_new"`
 }
 
 func NewUser(conn *websocket.Conn, addr, nickname, token string) *User {
@@ -54,7 +53,6 @@ func NewUser(conn *websocket.Conn, addr, nickname, token string) *User {
 	if user.UID == 0 {
 		user.UID = atomic.AddUint32(&globalUID, 1)
 		user.Token = genToken(user.UID, nickname)
-		user.IsNew = true
 	}
 
 	return user
