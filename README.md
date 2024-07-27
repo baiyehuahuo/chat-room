@@ -34,3 +34,11 @@ Go语言编程之旅 -- 聊天室模拟
    - 创建/修改聊天室
    - 聊天室信息存储和历史消息查询
 2. ![聊天室的交互流程](https://golang2.eddycjy.com/images/ch4/chatroom-design.png)
+
+## 项目组织和基本代码框架
+1. 目录分层
+   - cmd: 约定俗成，存放 main.main
+   - logic: 存放项目核心代码逻辑， 与 service 呈类似作用
+   - server: 存放 server 相关代码，类似于 controller
+   - template: 存放静态模板文件
+2. 主线程注册路由，开启处理用的子线程，启动服务监听端口
