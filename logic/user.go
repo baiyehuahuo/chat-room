@@ -63,6 +63,7 @@ func (u *User) ReceiveMessage(ctx context.Context) error {
 		for i := range msg.Ats {
 			msg.Ats[i] = msg.Ats[i][1:]
 		}
+		msg.Content = FilterSensitive(msg.Content)
 		Broadcaster.Broadcast(msg)
 	}
 }

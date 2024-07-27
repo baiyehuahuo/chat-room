@@ -1,6 +1,7 @@
 package server
 
 import (
+	"chatroom/global"
 	"fmt"
 	"html/template"
 	"log"
@@ -8,7 +9,7 @@ import (
 )
 
 func homeHandleFunc(w http.ResponseWriter, req *http.Request) {
-	tpl, err := template.ParseFiles(rootDir + "/template/home.html")
+	tpl, err := template.ParseFiles(global.RootDir + "/template/home.html")
 	if err != nil {
 		log.Println("模板解析错误", err)
 		_, err = fmt.Fprint(w, "模板解析错误")

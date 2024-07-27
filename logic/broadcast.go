@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"chatroom/global"
 	"log"
 	"sync"
 )
@@ -19,7 +20,7 @@ var Broadcaster = &broadcaster{
 	users:          make(map[string]*User),
 	enterChannel:   make(chan *User),
 	leaveChannel:   make(chan *User),
-	messageChannel: make(chan *Message, 10),
+	messageChannel: make(chan *Message, global.MessageQueenLen),
 }
 
 func (b *broadcaster) CanEnterRoom(nickname string) bool {
