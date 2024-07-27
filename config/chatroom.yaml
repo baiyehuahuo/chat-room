@@ -6,3 +6,5 @@ SensitiveWords:
   - 警察
 
 MessageQueenLen: 10
+OfflineNum: 10
+TokenSecret: fwf

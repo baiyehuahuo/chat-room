@@ -67,3 +67,13 @@ Go语言编程之旅 -- 聊天室模拟
    - DFA 又穷自动机
    - 朴素贝叶斯
    - 注意中文要先转换为 rune 才能准确获取长度
+3. 离线消息处理
+   - 识别同一个用户： 通过token。 token生成：
+     - 基于 HMAC-SHA256
+     - nickname+secret+uid 构成待 hash 的字符串，记为：message
+     - 将 message 使用 HMAC-SHA256 计算 hash，记为：messageMAC
+     - 将 messageMAC 使用 base64 进行处理，记为：messageMACStr 
+     - messageMACStr+“uid”+uid 就是 token
+     - 就是签名
+   - 离线消息
+     - 通过go容器中的 ring 实现，代码很短，大概看了一下

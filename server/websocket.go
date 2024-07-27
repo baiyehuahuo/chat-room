@@ -33,7 +33,7 @@ func WebSocketHandleFunc(w http.ResponseWriter, req *http.Request) {
 	}
 
 	addr := req.RemoteAddr
-	user := logic.NewUser(conn, addr, nickname)
+	user := logic.NewUser(conn, addr, nickname, "")
 
 	// 启动用户发送消息的线程
 	go user.SendMessage(req.Context())

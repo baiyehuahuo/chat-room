@@ -36,6 +36,7 @@ func (b *broadcaster) Start() {
 		case user := <-b.enterChannel:
 			b.userLock.Lock()
 			b.users[user.NickName] = user
+			offlineProcessorInstance.Send(user)
 			b.userLock.Unlock()
 		case user := <-b.leaveChannel:
 			b.userLock.Lock()
@@ -66,6 +67,7 @@ func (b *broadcaster) Start() {
 					user.MessageChan <- message
 				}
 			}
+			offlineProcessorInstance.Save(message)
 			b.userLock.Unlock()
 		}
 	}
